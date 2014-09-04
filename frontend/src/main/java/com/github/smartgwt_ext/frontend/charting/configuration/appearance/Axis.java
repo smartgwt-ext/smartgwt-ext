@@ -1,0 +1,519 @@
+/*
+ * Copyright 2012-2014 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.github.smartgwt_ext.frontend.charting.configuration.appearance;
+
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayMixed;
+
+/**
+ * @author Andreas Berger
+ * @created 22.02.13 - 11:15
+ */
+public class Axis extends JavaScriptObject {
+	protected Axis() {
+	}
+
+	public static native final Axis create()/*-{
+        return {};
+    }-*/;
+
+	/**
+	 * format: either [1, 3] or [[1, 'a'], 3]. default null
+	 *
+	 * @return
+	 */
+	public final native JsArrayMixed getTicks()/*-{
+        return this.ticks;
+    }-*/;
+
+	/**
+	 * format: either [1, 3] or [[1, 'a'], 3]. default null
+	 *
+	 * @param ticks
+	 */
+	public final native Axis setTicks(JsArrayMixed ticks)/*-{
+        this.ticks = ticks;
+        return this;
+    }-*/;
+
+	public final Axis addTick(double x) {
+		return addTick(x, null);
+	}
+
+	public final native Axis addTick(double x, String label)/*-{
+        this.ticks = this.ticks || $wnd.Array.create();
+        this.ticks.push((label == null ? x : [ x, label ]));
+        return this;
+    }-*/;
+
+	/**
+	 * format: either [1, 3] or [[1, 'a'], 3]. default null
+	 *
+	 * @return
+	 */
+	public final native JsArrayMixed getMinorTicks()/*-{
+        return this.minorTicks;
+    }-*/;
+
+	public final Axis addMinorTick(double x) {
+		return addMinorTick(x, null);
+	}
+
+	public final native Axis addMinorTick(double x, String label)/*-{
+        this.minorTicks = this.minorTicks || $wnd.Array.create();
+        this.minorTicks.push((label == null ? x : [ x, label ]));
+        return this;
+    }-*/;
+
+	/**
+	 * format: either [1, 3] or [[1, 'a'], 3]. default null
+	 *
+	 * @param minorTicks
+	 */
+	public final native Axis setMinorTicks(JsArrayMixed minorTicks)/*-{
+        this.minorTicks = minorTicks;
+        return this;
+    }-*/;
+
+	/**
+	 * setting to true will show the axis ticks labels, hide otherwise. default
+	 * true
+	 *
+	 * @return
+	 */
+	public final native boolean isShowLabels()/*-{
+        return this.showLabels;
+    }-*/;
+
+	/**
+	 * setting to true will show the axis ticks labels, hide otherwise. default
+	 * true
+	 *
+	 * @param showLabels
+	 */
+	public final native Axis setShowLabels(boolean showLabels)/*-{
+        this.showLabels = showLabels;
+        return this;
+    }-*/;
+
+	/**
+	 * true to show the axis minor ticks labels, false to hide. default false
+	 *
+	 * @return
+	 */
+	public final native boolean isShowMinorLabels()/*-{
+        return this.showMinorLabels;
+    }-*/;
+
+	/**
+	 * true to show the axis minor ticks labels, false to hide. default false
+	 *
+	 * @param showMinorLabels
+	 */
+	public final native Axis setShowMinorLabels(boolean showMinorLabels)/*-{
+        this.showMinorLabels = showMinorLabels;
+        return this;
+    }-*/;
+
+	/**
+	 * labels' angle, in degrees. default xaxis: 0, yaxis: 90
+	 *
+	 * @return
+	 */
+	public final native int getLabelsAngle()/*-{
+        return this.labelsAngle;
+    }-*/;
+
+	/**
+	 * labels' angle, in degrees. default xaxis: 0, yaxis: 90
+	 *
+	 * @param labelsAngle
+	 */
+	public final native Axis setLabelsAngle(int labelsAngle)/*-{
+        this.labelsAngle = labelsAngle;
+        return this;
+    }-*/;
+
+	/**
+	 * axis title. default null
+	 *
+	 * @return
+	 */
+	public final native String getTitle()/*-{
+        return this.title;
+    }-*/;
+
+	/**
+	 * axis title. default null
+	 *
+	 * @param title
+	 */
+	public final native Axis setTitle(String title)/*-{
+        this.title = title;
+        return this;
+    }-*/;
+
+	/**
+	 * axis title's angle, in degrees. default xaxis: 0, y2axis: 270
+	 *
+	 * @return
+	 */
+	public final native int getTitleAngle()/*-{
+        return this.titleAngle;
+    }-*/;
+
+	/**
+	 * axis title's angle, in degrees. default xaxis: 0, y2axis: 270
+	 *
+	 * @param titleAngle
+	 */
+	public final native Axis setTitleAngle(int titleAngle)/*-{
+        this.titleAngle = titleAngle;
+        return this;
+    }-*/;
+
+	/**
+	 * number of ticks for automagically generated ticks. default 5
+	 *
+	 * @return
+	 */
+	public final native int getNoTicks()/*-{
+        return this.noTicks;
+    }-*/;
+
+	/**
+	 * number of ticks for automagically generated ticks. default 5
+	 *
+	 * @param noTicks
+	 */
+	public final native Axis setNoTicks(int noTicks)/*-{
+        this.noTicks = noTicks;
+        return this;
+    }-*/;
+
+	/**
+	 * number of minor ticks between major ticks for autogenerated ticks.
+	 * default null
+	 *
+	 * @return
+	 */
+	public final native int getMinorTickFreq()/*-{
+        return this.minorTickFreq;
+    }-*/;
+
+	/**
+	 * number of minor ticks between major ticks for autogenerated ticks.
+	 * default null
+	 *
+	 * @param minorTickFreq
+	 */
+	public final native Axis setMinorTickFreq(int minorTickFreq)/*-{
+        this.minorTickFreq = minorTickFreq;
+        return this;
+    }-*/;
+
+	// /**
+	// * fn: number, Object -> string.
+	// * default Flotr.defaultTickFormatter
+	// *
+	// * @return
+	// */
+	// public final native todo gettickFormatter()/*-{
+	// return this.tickFormatter;
+	// }-*/;
+	//
+	// /**
+	// * fn: number, Object -> string.
+	// * default Flotr.defaultTickFormatter
+	// *
+	// * @param tickFormatter
+	// */
+	// public final native AxisConfiguration settickFormatter(todo
+	// tickFormatter)/*-{
+	// this.tickFormatter = tickFormatter;return this;
+	// }-*/;
+
+	/**
+	 * no. of decimals, null means auto. default null
+	 *
+	 * @return
+	 */
+	public final native int getTickDecimals()/*-{
+        return this.tickDecimals;
+    }-*/;
+
+	/**
+	 * no. of decimals, null means auto. default null
+	 *
+	 * @param tickDecimals
+	 */
+	public final native Axis setTickDecimals(int tickDecimals)/*-{
+        this.tickDecimals = tickDecimals;
+        return this;
+    }-*/;
+
+	/**
+	 * min. value to show, null means set automatically. default null
+	 *
+	 * @return
+	 */
+	public final native Float getMin()/*-{
+        return this.min == null ? null : @java.lang.Float::valueOf(F)(this.min);
+    }-*/;
+
+	/**
+	 * min. value to show, null means set automatically. default null
+	 *
+	 * @param min
+	 */
+	public final native Axis setMin(Float min)/*-{
+        this.min = min == null ? null : min.@java.lang.Float::intValue()();
+        return this;
+    }-*/;
+
+	/**
+	 * max. value to show, null means set automatically. default null
+	 *
+	 * @return
+	 */
+	public final native Float getMax()/*-{
+        return this.max == null ? null : @java.lang.Float::valueOf(F)(this.max);
+    }-*/;
+
+	/**
+	 * max. value to show, null means set automatically. default null
+	 *
+	 * @param max
+	 */
+	public final native Axis setMax(Double max)/*-{
+        this.max = max == null ? null : max.@java.lang.Double::intValue()();
+        return this;
+    }-*/;
+
+	/**
+	 * Turns autoscaling on with true. default false
+	 *
+	 * @return
+	 */
+	public final native boolean isAutoscale()/*-{
+        return this.autoscale;
+    }-*/;
+
+	/**
+	 * Turns autoscaling on with true. default false
+	 *
+	 * @param autoscale
+	 */
+	public final native Axis setAutoscale(boolean autoscale)/*-{
+        this.autoscale = autoscale;
+        return this;
+    }-*/;
+
+	/**
+	 * margin in % to add if auto-setting min/max. default 0
+	 *
+	 * @return
+	 */
+	public final native int getAutoscaleMargin()/*-{
+        return this.autoscaleMargin;
+    }-*/;
+
+	/**
+	 * margin in % to add if auto-setting min/max. default 0
+	 *
+	 * @param autoscaleMargin
+	 */
+	public final native Axis setAutoscaleMargin(int autoscaleMargin)/*-{
+        this.autoscaleMargin = autoscaleMargin;
+        return this;
+    }-*/;
+
+	/**
+	 * color of the ticks. default null
+	 *
+	 * @return
+	 */
+	public final native String getColor()/*-{
+        return this.color;
+    }-*/;
+
+	/**
+	 * color of the ticks. default null
+	 *
+	 * @param color
+	 */
+	public final native Axis setColor(String color)/*-{
+        this.color = color;
+        return this;
+    }-*/;
+
+	/**
+	 * can be 'time' or 'normal'. default 'normal'
+	 *
+	 * @return
+	 */
+	public final native String getMode()/*-{
+        return this.mode;
+    }-*/;
+
+	/**
+	 * can be 'time' or 'normal'. default 'normal'
+	 *
+	 * @param mode
+	 */
+	public final native Axis setMode(String mode)/*-{
+        this.mode = mode;
+        return this;
+    }-*/;
+
+	/**
+	 * . default null
+	 *
+	 * @return
+	 */
+	public final native String getTimeFormat()/*-{
+        return this.timeFormat;
+    }-*/;
+
+	/**
+	 * . default null
+	 *
+	 * @param timeFormat
+	 */
+	public final native Axis setTimeFormat(String timeFormat)/*-{
+        this.timeFormat = timeFormat;
+        return this;
+    }-*/;
+
+	/**
+	 * For UTC time ('local' for local time).. default 'UTC'
+	 *
+	 * @return
+	 */
+	public final native String getTimeMode()/*-{
+        return this.timeMode;
+    }-*/;
+
+	/**
+	 * For UTC time ('local' for local time).. default 'UTC'
+	 *
+	 * @param timeMode
+	 */
+	public final native Axis setTimeMode(String timeMode)/*-{
+        this.timeMode = timeMode;
+        return this;
+    }-*/;
+
+	/**
+	 * Unit for time (millisecond, second, minute, hour, day, month, year).
+	 * default 'millisecond'
+	 *
+	 * @return
+	 */
+	public final native String getTimeUnit()/*-{
+        return this.timeUnit;
+    }-*/;
+
+	/**
+	 * Unit for time (millisecond, second, minute, hour, day, month, year).
+	 * default 'millisecond'
+	 *
+	 * @param timeUnit
+	 */
+	public final native Axis setTimeUnit(String timeUnit)/*-{
+        this.timeUnit = timeUnit;
+        return this;
+    }-*/;
+
+	/**
+	 * Scaling, can be 'linear' or 'logarithmic'. default 'linear'
+	 *
+	 * @return
+	 */
+	public final native String getScaling()/*-{
+        return this.scaling;
+    }-*/;
+
+	/**
+	 * Scaling, can be 'linear' or 'logarithmic'. default 'linear'
+	 *
+	 * @param scaling
+	 */
+	public final native Axis setScaling(String scaling)/*-{
+        this.scaling = scaling;
+        return this;
+    }-*/;
+
+	// /**
+	// * .
+	// * default Math.E
+	// *
+	// * @return
+	// */
+	// public final native todo getbase()/*-{
+	// return this.base;
+	// }-*/;
+	//
+	// /**
+	// * .
+	// * default Math.E
+	// *
+	// * @param base
+	// */
+	// public final native AxisConfiguration setbase(todo base)/*-{
+	// this.base = base;return this;
+	// }-*/;
+
+	/**
+	 * . default 'center'
+	 *
+	 * @return
+	 */
+	public final native String getTitleAlign()/*-{
+        return this.titleAlign;
+    }-*/;
+
+	/**
+	 * . default 'center'
+	 *
+	 * @param titleAlign
+	 */
+	public final native Axis setTitleAlign(String titleAlign)/*-{
+        this.titleAlign = titleAlign;
+        return this;
+    }-*/;
+
+	/**
+	 * Turn off margins with false. default true
+	 *
+	 * @return
+	 */
+	public final native boolean isMargin()/*-{
+        return this.margin;
+    }-*/;
+
+	/**
+	 * Turn off margins with false. default true
+	 *
+	 * @param margin
+	 */
+	public final native Axis setMargin(boolean margin)/*-{
+        this.margin = margin;
+        return this;
+    }-*/;
+
+}
