@@ -43,10 +43,7 @@ import com.fasterxml.jackson.databind.ser.SerializerFactory;
 import com.github.smartgwt_ext.server.core.HasIdField;
 import com.github.smartgwt_ext.server.core.annotations.DisplayField;
 import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
-import com.github.smartgwt_ext.server.core.facade.BeanInformation;
-import com.github.smartgwt_ext.server.core.facade.BeanInformationFromClass;
-import com.github.smartgwt_ext.server.core.facade.PropertyInformation;
-import com.github.smartgwt_ext.server.core.facade.PropertyInformationFromClass;
+import com.github.smartgwt_ext.server.introspection.facade.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -182,7 +179,7 @@ public abstract class EnhancedObjectMapper {
 
 		public HasIdFieldSerializer(String fieldName, Class<? extends HasIdField> entityClass) {
 			displayField = (PropertyInformationFromClass)
-					getDisplayField(new BeanInformationFromClass(entityClass));
+					getDisplayField(BeanInformationFactory.createBeanInformation(entityClass));
 			if (displayField != null) {
 				displayFieldName = fieldName + "_" + displayField.getName();
 			}

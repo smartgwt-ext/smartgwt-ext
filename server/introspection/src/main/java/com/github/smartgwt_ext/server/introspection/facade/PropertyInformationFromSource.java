@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.smartgwt_ext.server.core.facade;
+package com.github.smartgwt_ext.server.introspection.facade;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -134,7 +134,7 @@ public class PropertyInformationFromSource extends PropertyInformationBase<Prope
 			if (!(type instanceof DeclaredType)) {
 				return null;
 			}
-			typeBean = new BeanInformationFromSource(((TypeElement) ((DeclaredType) type).asElement()));
+			typeBean = BeanInformationFactory.createBeanInformation(((TypeElement) ((DeclaredType) type).asElement()));
 		}
 		return typeBean;
 	}

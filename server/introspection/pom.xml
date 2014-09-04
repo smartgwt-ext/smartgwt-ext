@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2012-2014 the original author or authors.
+  ~ Copyright 2012-Copyright 2012-2014 the original author or authors.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,27 +15,20 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.smartgwt-ext</groupId>
+        <groupId>com.github.smartgwt-ext.server</groupId>
         <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <name>Server Parent POM</name>
-    <groupId>com.github.smartgwt-ext.server</groupId>
-    <artifactId>parent</artifactId>
+    <name>SmartGWT-EXT Introspection</name>
+    <description>Introspection for Server components</description>
+    <artifactId>introspection</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
-    <modules>
-        <module>introspection</module>
-        <module>core</module>
-        <module>spring-binding</module>
-        <module>hibernate-binding</module>
-        <module>generation</module>
-    </modules>
+
 </project>

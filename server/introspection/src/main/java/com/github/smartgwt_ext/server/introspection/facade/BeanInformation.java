@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.smartgwt_ext.server.core.facade;
+package com.github.smartgwt_ext.server.introspection.facade;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;

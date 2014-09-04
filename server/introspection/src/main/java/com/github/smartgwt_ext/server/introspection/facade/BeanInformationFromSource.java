@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.smartgwt_ext.server.core.facade;
+package com.github.smartgwt_ext.server.introspection.facade;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
@@ -35,7 +35,7 @@ public class BeanInformationFromSource extends BeanInformationBase<PropertyInfor
 	private TypeElement type;
 
 	/** @param type */
-	public BeanInformationFromSource(TypeElement type) {
+    BeanInformationFromSource(TypeElement type) {
 		this.type = type;
 		parseElement(type);
 	}
@@ -179,6 +179,6 @@ public class BeanInformationFromSource extends BeanInformationBase<PropertyInfor
 		if (superClass.getQualifiedName().toString().equals(Object.class.getName())) {
 			return null;
 		}
-		return new BeanInformationFromSource(superClass);
+		return BeanInformationFactory.createBeanInformation(superClass);
 	}
 }

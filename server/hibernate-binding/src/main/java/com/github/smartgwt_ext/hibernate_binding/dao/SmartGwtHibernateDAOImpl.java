@@ -22,9 +22,10 @@ import com.github.smartgwt_ext.server.core.communication.model.JsCriterion;
 import com.github.smartgwt_ext.server.core.communication.model.JsSortSpecifier;
 import com.github.smartgwt_ext.server.core.dao.FetchResult;
 import com.github.smartgwt_ext.server.core.dao.SmartGwtDAOImpl;
-import com.github.smartgwt_ext.server.core.facade.BeanInformationFromClass;
-import com.github.smartgwt_ext.server.core.facade.PropertyInformationFromClass;
 import com.github.smartgwt_ext.server.core.processing.EnhancedObjectMapper;
+import com.github.smartgwt_ext.server.introspection.facade.BeanInformationFactory;
+import com.github.smartgwt_ext.server.introspection.facade.BeanInformationFromClass;
+import com.github.smartgwt_ext.server.introspection.facade.PropertyInformationFromClass;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,15 +40,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Andreas Berger
@@ -64,12 +57,16 @@ public abstract class SmartGwtHibernateDAOImpl extends SmartGwtDAOImpl {
 
 	protected abstract Session getSession();
 
-	/** @return the cachingEnabled */
+	/**
+	 * @return the cachingEnabled
+	 */
 	public boolean isCachingEnabled() {
 		return cachingEnabled;
 	}
 
-	/** @param cachingEnabled the cachingEnabled to set */
+	/**
+	 * @param cachingEnabled the cachingEnabled to set
+	 */
 	public void setCachingEnabled(boolean cachingEnabled) {
 		this.cachingEnabled = cachingEnabled;
 	}
@@ -392,7 +389,7 @@ public abstract class SmartGwtHibernateDAOImpl extends SmartGwtDAOImpl {
 			if (pkInfo.containsKey(clazz)) {
 				return null;
 			}
-			BeanInformationFromClass bi = new BeanInformationFromClass(clazz);
+			BeanInformationFromClass bi = BeanInformationFactory.createBeanInformation(clazz);
 
 			PropertyInformationFromClass pk = null;
 			Map<String, String> mapsIdFields = new HashMap<String, String>();
@@ -411,7 +408,7 @@ public abstract class SmartGwtHibernateDAOImpl extends SmartGwtDAOImpl {
 				return null;
 			}
 			Map<String, PropertyInformationFromClass> idProps = new HashMap<String, PropertyInformationFromClass>();
-			BeanInformationFromClass pkBeanInfo = new BeanInformationFromClass(pk.getType());
+			BeanInformationFromClass pkBeanInfo = BeanInformationFactory.createBeanInformation(pk.getType());
 			for (PropertyInformationFromClass pkProp : pkBeanInfo.getAllProperties()) {
 				String classFieldName = mapsIdFields.get(pkProp.getName());
 				if (classFieldName != null) {

@@ -23,14 +23,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.smartgwt_ext.server.core.HasIdField;
 import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
-import com.github.smartgwt_ext.server.core.facade.BeanInformation;
-import com.github.smartgwt_ext.server.core.facade.BeanInformationFromClass;
-import com.github.smartgwt_ext.server.core.facade.BeanInformationFromSource;
-import com.github.smartgwt_ext.server.core.facade.PropertyInformation;
 import com.github.smartgwt_ext.server.core.processing.EnhancedObjectMapper;
 import com.github.smartgwt_ext.server.generation.model.JsDatasource;
 import com.github.smartgwt_ext.server.generation.model.JsDatasourceField;
 import com.github.smartgwt_ext.server.generation.model.JsValidator;
+import com.github.smartgwt_ext.server.introspection.facade.BeanInformation;
+import com.github.smartgwt_ext.server.introspection.facade.BeanInformationFactory;
+import com.github.smartgwt_ext.server.introspection.facade.PropertyInformation;
 import com.smartgwt.client.types.FieldType;
 import com.smartgwt.client.types.ValidatorType;
 import org.hibernate.validator.constraints.Length;
@@ -40,13 +39,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.tools.Diagnostic.Kind;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -54,15 +47,7 @@ import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.io.Writer;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Erzeugt die Javaskript Datei zur Verwedung mit diesem Framework
@@ -92,7 +77,7 @@ public class DatasourceGenerator {
 	public void process(Writer writer, Class<?>... classes) throws IOException {
 		writeBaseClass(writer);
 		for (Class<?> clazz : classes) {
-			writeDatasource(writer, new BeanInformationFromClass(clazz));
+			writeDatasource(writer, BeanInformationFactory.createBeanInformation(clazz));
 		}
 
 		if (!missingProperties.isEmpty()) {
@@ -111,7 +96,7 @@ public class DatasourceGenerator {
 			if (!(element instanceof TypeElement)) {
 				continue;
 			}
-			writeDatasource(writer, new BeanInformationFromSource((TypeElement) element));
+			writeDatasource(writer, BeanInformationFactory.createBeanInformation((TypeElement) element));
 		}
 
 		if (!missingProperties.isEmpty()) {

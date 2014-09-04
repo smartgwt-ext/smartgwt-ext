@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.smartgwt_ext.server.core.facade;
+package com.github.smartgwt_ext.server.introspection.facade;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -27,7 +27,7 @@ public class BeanInformationFromClass extends BeanInformationBase<PropertyInform
 
 	private Class<?> clazz;
 
-	public BeanInformationFromClass(Class<?> clazz) {
+	BeanInformationFromClass(Class<?> clazz) {
 		this.clazz = clazz;
 		parseClass();
 	}
@@ -152,6 +152,6 @@ public class BeanInformationFromClass extends BeanInformationBase<PropertyInform
 
 	@Override
 	protected BeanInformation<PropertyInformationFromClass> initSuperBean() {
-		return clazz.getSuperclass() == Object.class ? null : new BeanInformationFromClass(clazz.getSuperclass());
+		return clazz.getSuperclass() == Object.class ? null : BeanInformationFactory.createBeanInformation(clazz.getSuperclass());
 	}
 }

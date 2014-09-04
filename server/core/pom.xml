@@ -32,6 +32,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.smartgwt-ext.server</groupId>
+            <artifactId>introspection</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.isomorphic.smartgwt.lgpl</groupId>
             <artifactId>smartgwt-lgpl</artifactId>
             <scope>provided</scope>

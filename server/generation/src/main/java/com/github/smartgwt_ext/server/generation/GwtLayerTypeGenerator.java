@@ -18,25 +18,13 @@ package com.github.smartgwt_ext.server.generation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.smartgwt_ext.server.core.HasIdField;
 import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
-import com.github.smartgwt_ext.server.core.facade.BeanInformation;
-import com.github.smartgwt_ext.server.core.facade.BeanInformationFromClass;
-import com.github.smartgwt_ext.server.core.facade.BeanInformationFromSource;
-import com.github.smartgwt_ext.server.core.facade.PropertyInformation;
 import com.github.smartgwt_ext.server.core.processing.EnhancedObjectMapper;
+import com.github.smartgwt_ext.server.introspection.facade.BeanInformation;
+import com.github.smartgwt_ext.server.introspection.facade.BeanInformationFactory;
+import com.github.smartgwt_ext.server.introspection.facade.PropertyInformation;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.smartgwt.client.util.JSOHelper;
-import com.sun.codemodel.CodeWriter;
-import com.sun.codemodel.JBlock;
-import com.sun.codemodel.JClassAlreadyExistsException;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JConditional;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
-import com.sun.codemodel.JOp;
-import com.sun.codemodel.JType;
-import com.sun.codemodel.JVar;
+import com.sun.codemodel.*;
 
 import javax.annotation.Generated;
 import javax.lang.model.element.Element;
@@ -80,7 +68,7 @@ public class GwtLayerTypeGenerator {
 	 */
 	public void process(CodeWriter writer, Class<?>... classes) throws IOException {
 		for (Class<?> clazz : classes) {
-			writeLayerType(new BeanInformationFromClass(clazz));
+			writeLayerType(BeanInformationFactory.createBeanInformation(clazz));
 		}
 		cm.build(writer);
 	}
@@ -98,7 +86,7 @@ public class GwtLayerTypeGenerator {
 			if (!(element instanceof TypeElement)) {
 				continue;
 			}
-			writeLayerType(new BeanInformationFromSource((TypeElement) element));
+			writeLayerType(BeanInformationFactory.createBeanInformation((TypeElement) element));
 		}
 		cm.build(writer);
 	}
@@ -188,7 +176,6 @@ public class GwtLayerTypeGenerator {
 	/**
 	 * Generiert einen setter für ein Enum-Property.
 	 *
-	 * @param cm das CodeModel
 	 * @param theClass die Klasse in der der setter generiert werden soll
 	 * @param prop das Property für das der setter generiert werden soll
 	 */
@@ -233,7 +220,6 @@ public class GwtLayerTypeGenerator {
 	/**
 	 * Generiert einen getter für ein Enum-Property.
 	 *
-	 * @param cm das CodeModel
 	 * @param theClass die Klasse in der der getter generiert werden soll
 	 * @param prop das Property für das der getter generiert werden soll
 	 */
