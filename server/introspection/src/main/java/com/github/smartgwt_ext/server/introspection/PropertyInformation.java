@@ -16,6 +16,7 @@
 package com.github.smartgwt_ext.server.introspection;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -27,19 +28,29 @@ public interface PropertyInformation<T extends PropertyInformation<?>> {
 
 	<A extends Annotation> A getAnnotation(Class<A> annotationClass);
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	String getName();
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	String getTypeSimpleName();
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	String getTypeQualifiedName();
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	boolean isEnum();
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	List<String> getEnumNames();
 
 	/**
@@ -48,11 +59,17 @@ public interface PropertyInformation<T extends PropertyInformation<?>> {
 	 */
 	boolean isTypeOfClass(Class<?> clazz);
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	BeanInformation<T> getBeanInformation();
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	String getDeclaringTypeSimpleName();
 
 	boolean isTransient();
+
+	void setValue(Object bean, Object value) throws InvocationTargetException, IllegalAccessException;
 }

@@ -27,38 +27,38 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class BeanInformationFactory {
 
-    private static final Map<Object, SoftReference<BeanInformation<?>>> SOFT_REFERENCE_MAP = new ConcurrentHashMap<Object, SoftReference<BeanInformation<?>>>();
+	private static final Map<Object, SoftReference<BeanInformation<?>>> SOFT_REFERENCE_MAP = new ConcurrentHashMap<Object, SoftReference<BeanInformation<?>>>();
 
-    private BeanInformationFactory() {
-    }
+	private BeanInformationFactory() {
+	}
 
-    public static BeanInformationFromClass createBeanInformation(Class<?> clazz) {
-        SoftReference<BeanInformation<?>> ref = SOFT_REFERENCE_MAP.get(clazz);
+	public static BeanInformationFromClass createBeanInformation(Class<?> clazz) {
+		SoftReference<BeanInformation<?>> ref = SOFT_REFERENCE_MAP.get(clazz);
 		BeanInformationFromClass bi;
-        if (ref != null){
-            //noinspection unchecked
-            bi = (BeanInformationFromClass) ref.get();
-            if (bi != null){
-                return bi;
-            }
-        }
-        bi = new BeanInformationFromClass(clazz);
-        SOFT_REFERENCE_MAP.put(clazz, new SoftReference<BeanInformation<?>>(bi));
-        return bi;
-    }
+		if (ref != null) {
+			//noinspection unchecked
+			bi = (BeanInformationFromClass) ref.get();
+			if (bi != null) {
+				return bi;
+			}
+		}
+		bi = new BeanInformationFromClass(clazz);
+		SOFT_REFERENCE_MAP.put(clazz, new SoftReference<BeanInformation<?>>(bi));
+		return bi;
+	}
 
-    public static BeanInformationFromSource createBeanInformation(TypeElement type) {
-        SoftReference<BeanInformation<?>> ref = SOFT_REFERENCE_MAP.get(type);
+	public static BeanInformationFromSource createBeanInformation(TypeElement type) {
+		SoftReference<BeanInformation<?>> ref = SOFT_REFERENCE_MAP.get(type);
 		BeanInformationFromSource bi;
-        if (ref != null){
-            //noinspection unchecked
-            bi = (BeanInformationFromSource) ref.get();
-            if (bi != null){
-                return bi;
-            }
-        }
-        bi = new BeanInformationFromSource(type);
-        SOFT_REFERENCE_MAP.put(type, new SoftReference<BeanInformation<?>>(bi));
-        return bi;
-    }
+		if (ref != null) {
+			//noinspection unchecked
+			bi = (BeanInformationFromSource) ref.get();
+			if (bi != null) {
+				return bi;
+			}
+		}
+		bi = new BeanInformationFromSource(type);
+		SOFT_REFERENCE_MAP.put(type, new SoftReference<BeanInformation<?>>(bi));
+		return bi;
+	}
 }

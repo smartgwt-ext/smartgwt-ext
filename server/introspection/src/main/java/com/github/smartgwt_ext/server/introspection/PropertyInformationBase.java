@@ -16,20 +16,22 @@
 package com.github.smartgwt_ext.server.introspection;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
 public abstract class PropertyInformationBase<T extends PropertyInformation<T>> implements PropertyInformation<T> {
 
 	private String name;
 
-	/** @param name the name to set */
+	/**
+	 * @param name the name to set
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/** @return the name */
+	/**
+	 * @return the name
+	 */
 	@Override
 	public String getName() {
 		return name;

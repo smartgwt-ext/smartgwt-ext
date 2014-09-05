@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
 public class PropertyInformationFromSource extends PropertyInformationBase<PropertyInformationFromSource> {
@@ -39,7 +37,7 @@ public class PropertyInformationFromSource extends PropertyInformationBase<Prope
 	private Set<Modifier> fieldModifier;
 	private BeanInformationFromSource typeBean;
 
-	public PropertyInformationFromSource() {
+	PropertyInformationFromSource() {
 		elemsForAnnotations = new ArrayList<Element>();
 	}
 
@@ -149,17 +147,28 @@ public class PropertyInformationFromSource extends PropertyInformationBase<Prope
 		return fieldModifier != null && fieldModifier.contains(Modifier.TRANSIENT);
 	}
 
-	/** @param declaringElement the declaringElement to set */
+	@Override
+	public void setValue(Object bean, Object value) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @param declaringElement the declaringElement to set
+	 */
 	public void setDeclaringElement(TypeElement declaringElement) {
 		this.declaringElement = declaringElement;
 	}
 
-	/** @param value */
+	/**
+	 * @param value
+	 */
 	public void addElementForAnnotationCheck(Element value) {
 		elemsForAnnotations.add(value);
 	}
 
-	/** @param asType */
+	/**
+	 * @param asType
+	 */
 	public void setType(TypeMirror type) {
 		this.type = type;
 	}

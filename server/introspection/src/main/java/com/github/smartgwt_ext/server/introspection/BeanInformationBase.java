@@ -20,8 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
 public abstract class BeanInformationBase<T extends PropertyInformation<?>> implements BeanInformation<T> {
@@ -47,7 +45,9 @@ public abstract class BeanInformationBase<T extends PropertyInformation<?>> impl
 		return ("" + name.charAt(prefixLength)).toLowerCase() + name.substring(prefixLength + 1);
 	}
 
-	/** @return the properties */
+	/**
+	 * @return the properties
+	 */
 	@Override
 	public Collection<T> getProperties() {
 		return properties.values();

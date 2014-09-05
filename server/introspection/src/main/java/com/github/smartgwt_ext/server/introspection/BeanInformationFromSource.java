@@ -15,6 +15,9 @@
  */
 package com.github.smartgwt_ext.server.introspection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
@@ -26,16 +29,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
 public class BeanInformationFromSource extends BeanInformationBase<PropertyInformationFromSource> {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(BeanInformationFromSource.class);
+
 	private TypeElement type;
 
-	/** @param type */
-    BeanInformationFromSource(TypeElement type) {
+	/**
+	 * @param type
+	 */
+	BeanInformationFromSource(TypeElement type) {
 		this.type = type;
 		parseElement(type);
 	}
@@ -82,61 +87,40 @@ public class BeanInformationFromSource extends BeanInformationBase<PropertyInfor
 			}
 		}
 
-		for (Map.Entry<String, VariableElement> entry : fields.entrySet()) {
-			ExecutableElement getterMethod = getter.remove(entry.getKey());
-			ExecutableElement setterMethod = setter.remove(entry.getKey());
-			PropertyInformationFromSource info = new PropertyInformationFromSource();
-			info.setName(entry.getKey());
-			info.addElementForAnnotationCheck(entry.getValue());
-			info.setType(entry.getValue().asType());
-			info.setDeclaringElement((TypeElement) entry.getValue().getEnclosingElement());
-			info.setFieldModifier(entry.getValue().getModifiers());
-			if (getterMethod != null) {
-				if (!getterMethod.getReturnType().toString().equals(entry.getValue().asType().toString())) {
-					System.err.println("Types of getter does not match field [" +
-							getterMethod.getReturnType() + ", "
-							+ entry.getValue().asType() + "] "
-							+ ((TypeElement) entry.getValue().getEnclosingElement()).getQualifiedName() + "::" +
-							entry.getKey());
-				} else {
-					info.addElementForAnnotationCheck(getterMethod);
-				}
-			}
-			if (setterMethod != null) {
-				if (!setterMethod.getParameters().get(0).asType().toString()
-						.equals(entry.getValue().asType().toString())) {
-					System.err.println("Types of setter does not match field [" +
-							setterMethod.getParameters().get(0).asType() + ", " +
-							entry.getValue().asType() +
-							"]"
-							+ ((TypeElement) entry.getValue().getEnclosingElement()).getQualifiedName() + "::"
-							+ entry.getKey());
-				} else {
-					info.addElementForAnnotationCheck(setterMethod);
-				}
-			}
-			addProperty(info);
-		}
-
 		for (Map.Entry<String, ExecutableElement> entry : getter.entrySet()) {
-			ExecutableElement setterMethod = setter.remove(entry.getKey());
 			PropertyInformationFromSource info = new PropertyInformationFromSource();
 			info.setName(entry.getKey());
 			info.addElementForAnnotationCheck(entry.getValue());
 			info.setType(entry.getValue().getReturnType());
 			info.setDeclaringElement((TypeElement) entry.getValue().getEnclosingElement());
+
+			ExecutableElement setterMethod = setter.remove(entry.getKey());
 			if (setterMethod != null) {
 				if (!setterMethod.getParameters().get(0).asType().toString()
 						.equals(entry.getValue().getReturnType().toString())) {
-					System.err.println("Types of setter does not match getter [" +
-							setterMethod.getParameters().get(0).asType() + ", " +
-							entry.getValue().getReturnType() + "]"
-							+ ((TypeElement) entry.getValue().getEnclosingElement()).getQualifiedName() + "::"
-							+ entry.getKey());
+					LOGGER.warn("Types of setter does not match getter [{}, {}] {}::{}",
+							setterMethod.getParameters().get(0).asType(),
+							entry.getValue().getReturnType(),
+							((TypeElement) entry.getValue().getEnclosingElement()).getQualifiedName(),
+							entry.getKey());
 				} else {
 					info.addElementForAnnotationCheck(setterMethod);
 				}
 			}
+
+			VariableElement field = fields.remove(entry.getKey());
+			if (field != null) {
+				if (!field.asType().toString().equals(entry.getValue().getReturnType().toString())) {
+					LOGGER.warn("Types of field does not match getter [{}, {}] {}::{}",
+							field.asType(),
+							entry.getValue().getReturnType().toString(),
+							((TypeElement) entry.getValue().getEnclosingElement()).getQualifiedName(),
+							entry.getKey());
+				} else {
+					info.addElementForAnnotationCheck(field);
+				}
+			}
+
 			addProperty(info);
 		}
 
@@ -146,8 +130,34 @@ public class BeanInformationFromSource extends BeanInformationBase<PropertyInfor
 			info.addElementForAnnotationCheck(entry.getValue());
 			info.setType(entry.getValue().getParameters().get(0).asType());
 			info.setDeclaringElement((TypeElement) entry.getValue().getEnclosingElement());
+
+			VariableElement field = fields.remove(entry.getKey());
+			if (field != null) {
+				if (!field.asType().toString().equals(entry.getValue().getParameters().get(0).asType().toString())) {
+					LOGGER.warn("Types of field does not match setter [{}, {}] {}::{}",
+							field.asType(),
+							entry.getValue().getParameters().get(0).asType().toString(),
+							((TypeElement) entry.getValue().getEnclosingElement()).getQualifiedName(),
+							entry.getKey());
+				} else {
+					info.addElementForAnnotationCheck(field);
+				}
+			}
+
 			addProperty(info);
 		}
+
+		for (Map.Entry<String, VariableElement> entry : fields.entrySet()) {
+			PropertyInformationFromSource info = new PropertyInformationFromSource();
+			info.setName(entry.getKey());
+			info.addElementForAnnotationCheck(entry.getValue());
+			info.setType(entry.getValue().asType());
+			info.setDeclaringElement((TypeElement) entry.getValue().getEnclosingElement());
+			info.setFieldModifier(entry.getValue().getModifiers());
+
+			addProperty(info);
+		}
+
 	}
 
 	@Override

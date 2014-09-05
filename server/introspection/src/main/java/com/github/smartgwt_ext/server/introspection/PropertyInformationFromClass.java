@@ -17,6 +17,7 @@ package com.github.smartgwt_ext.server.introspection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -43,40 +44,51 @@ public class PropertyInformationFromClass extends PropertyInformationBase<Proper
 
 	private BeanInformationFromClass typeBean;
 
-	public PropertyInformationFromClass() {
+	PropertyInformationFromClass() {
 	}
 
+	@Deprecated
 	public PropertyInformationFromClass(Class<?> type) {
 		this.type = type;
 	}
 
-	/** @param field the field to set */
+	/**
+	 * @param field the field to set
+	 */
 	public void setField(Field field) {
 		this.field = field;
 		addAnnotations(field.getAnnotations());
 		declaringType = field.getDeclaringClass();
 	}
 
-	/** @param getter the getter to set */
+	/**
+	 * @param getter the getter to set
+	 */
 	public void setGetter(Method getter) {
 		this.getter = getter;
 		addAnnotations(getter.getAnnotations());
 		declaringType = getter.getDeclaringClass();
 	}
 
-	/** @param setter the setter to set */
+	/**
+	 * @param setter the setter to set
+	 */
 	public void setSetter(Method setter) {
 		this.setter = setter;
 		addAnnotations(setter.getAnnotations());
 		declaringType = setter.getDeclaringClass();
 	}
 
-	/** @return the type */
+	/**
+	 * @return the type
+	 */
 	public Class<?> getType() {
 		return type;
 	}
 
-	/** @param type the type to set */
+	/**
+	 * @param type the type to set
+	 */
 	public void setType(Class<?> type) {
 		this.type = type;
 	}
@@ -125,10 +137,29 @@ public class PropertyInformationFromClass extends PropertyInformationBase<Proper
 
 	@Override
 	public boolean isTransient() {
+		if (field == null) {
+			return false;
+		}
 		return Modifier.isTransient(field.getModifiers());
 	}
 
-	/** @param annotations */
+	@Override
+	public void setValue(Object bean, Object value) throws InvocationTargetException, IllegalAccessException {
+		if (setter != null) {
+			setter.invoke(bean, value);
+			return;
+		}
+		if (field != null) {
+			field.setAccessible(true);
+			field.set(bean, value);
+			return;
+		}
+		throw new IllegalStateException("No setter or field available");
+	}
+
+	/**
+	 * @param annotations
+	 */
 	protected void addAnnotations(Annotation[] annotations) {
 		for (Annotation annotation : annotations) {
 			addAnnotation(annotation);
@@ -142,7 +173,6 @@ public class PropertyInformationFromClass extends PropertyInformationBase<Proper
 		annotations.put(annotation.annotationType(), annotation);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
 		if (annotations == null) {
@@ -162,5 +192,4 @@ public class PropertyInformationFromClass extends PropertyInformationBase<Proper
 	public Field getField() {
 		return field;
 	}
-
 }

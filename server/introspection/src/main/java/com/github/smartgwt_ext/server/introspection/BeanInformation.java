@@ -18,18 +18,26 @@ package com.github.smartgwt_ext.server.introspection;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
-/** @author Andreas Berger */
+/**
+ * @author Andreas Berger
+ */
 public interface BeanInformation<T extends PropertyInformation<?>> {
 
-	/** @return  */
+	/**
+	 * @return
+	 */
 	String getSimpleName();
 
 	String getName();
 
-	/** @return properties of this bean, no inherited Properties */
+	/**
+	 * @return properties of this bean, no inherited Properties
+	 */
 	Collection<T> getProperties();
 
-	/** @return all properties, including inherited Properties */
+	/**
+	 * @return all properties, including inherited Properties
+	 */
 	Collection<T> getAllProperties();
 
 	BeanInformation<T> getSuperBeanInformation();

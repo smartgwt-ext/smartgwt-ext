@@ -15,6 +15,9 @@
  */
 package com.github.smartgwt_ext.server.introspection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,8 +25,12 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** @author Andreas Berger */
+/**
+ * @author Andreas Berger
+ */
 public class BeanInformationFromClass extends BeanInformationBase<PropertyInformationFromClass> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BeanInformationFromClass.class);
 
 	private Class<?> clazz;
 
@@ -71,65 +78,76 @@ public class BeanInformationFromClass extends BeanInformationBase<PropertyInform
 			fields.put(field.getName(), field);
 		}
 
-		for (Map.Entry<String, Field> entry : fields.entrySet()) {
-			Method getterMethod = getter.remove(entry.getKey());
-			Method setterMethod = setter.remove(entry.getKey());
-			PropertyInformationFromClass info = new PropertyInformationFromClass();
-			info.setName(entry.getKey());
-			info.setField(entry.getValue());
-			info.setType(entry.getValue().getType());
-			if (getterMethod != null) {
-				if (!getterMethod.getReturnType().isAssignableFrom(entry.getValue().getType())) {
-					System.err.println("Types of getter does not match field [" +
-							getterMethod.getReturnType() + ", "
-							+ entry.getValue().getType() + "] " + clazz.getName() + "::" +
-							entry.getKey());
-				} else {
-					info.setGetter(getterMethod);
-				}
-			}
-			if (setterMethod != null) {
-				if (!setterMethod.getParameterTypes()[0].isAssignableFrom(entry.getValue().getType())) {
-					System.err.println("Types of setter does not match field [" +
-							setterMethod.getParameterTypes()[0] + ", " + entry.getValue().getType() +
-							"]"
-							+ clazz.getName() + "::" + entry.getKey());
-				} else {
-					info.setSetter(setterMethod);
-				}
-			}
-			addProperty(info);
-		}
-
 		for (Map.Entry<String, Method> entry : getter.entrySet()) {
-			Method setterMethod = setter.remove(entry.getKey());
+
 			PropertyInformationFromClass info = new PropertyInformationFromClass();
 			info.setName(entry.getKey());
 			info.setGetter(entry.getValue());
 			info.setType(entry.getValue().getReturnType());
+
+			Method setterMethod = setter.remove(entry.getKey());
 			if (setterMethod != null) {
 				if (!setterMethod.getParameterTypes()[0].isAssignableFrom(entry.getValue().getReturnType())) {
-					System.err.println("Types of setter does not match getter [" +
-							setterMethod.getParameterTypes()[0] + ", " +
-							entry.getValue().getReturnType() + "]"
-							+ clazz.getName() + "::" + entry.getKey());
+					LOGGER.warn("Types of setter does not match getter [{}, {}] {}::{}",
+							setterMethod.getParameterTypes()[0],
+							entry.getValue().getReturnType(),
+							clazz.getName(),
+							entry.getKey());
 				} else {
 					info.setSetter(setterMethod);
+				}
+			}
+
+			Field field = fields.remove(entry.getKey());
+			if (field != null) {
+				if (!field.getType().isAssignableFrom(entry.getValue().getReturnType())) {
+					LOGGER.warn("Types of field does not match getter [{}, {}] {}::{}",
+							field.getType(),
+							entry.getValue().getReturnType(),
+							clazz.getName(),
+							entry.getKey());
+				} else {
+					info.setField(field);
 				}
 			}
 			addProperty(info);
 		}
 
 		for (Map.Entry<String, Method> entry : setter.entrySet()) {
+
 			PropertyInformationFromClass info = new PropertyInformationFromClass();
 			info.setName(entry.getKey());
 			info.setSetter(entry.getValue());
 			info.setType(entry.getValue().getParameterTypes()[0]);
+
+			Field field = fields.remove(entry.getKey());
+			if (field != null) {
+				if (!field.getType().isAssignableFrom(entry.getValue().getParameterTypes()[0])) {
+					LOGGER.warn("Types of field does not match setter [{}, {}] {}::{}",
+							field.getType(),
+							entry.getValue().getReturnType(),
+							clazz.getName(),
+							entry.getKey());
+				} else {
+					info.setField(field);
+				}
+			}
+
+			addProperty(info);
+		}
+
+		for (Map.Entry<String, Field> entry : fields.entrySet()) {
+			PropertyInformationFromClass info = new PropertyInformationFromClass();
+			info.setName(entry.getKey());
+			info.setField(entry.getValue());
+			info.setType(entry.getValue().getType());
 			addProperty(info);
 		}
 	}
 
-	/** @return the simpleName */
+	/**
+	 * @return the simpleName
+	 */
 	@Override
 	public String getSimpleName() {
 		return clazz.getSimpleName();
@@ -152,6 +170,7 @@ public class BeanInformationFromClass extends BeanInformationBase<PropertyInform
 
 	@Override
 	protected BeanInformation<PropertyInformationFromClass> initSuperBean() {
-		return clazz.getSuperclass() == Object.class ? null : BeanInformationFactory.createBeanInformation(clazz.getSuperclass());
+		return clazz.getSuperclass() == Object.class ? null
+				: BeanInformationFactory.createBeanInformation(clazz.getSuperclass());
 	}
 }
