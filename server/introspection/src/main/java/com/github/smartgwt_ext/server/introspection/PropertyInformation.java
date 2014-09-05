@@ -13,35 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.smartgwt_ext.server.introspection.facade;
+package com.github.smartgwt_ext.server.introspection;
 
 import java.lang.annotation.Annotation;
-import java.util.Collection;
+import java.util.List;
 
-/** @author Andreas Berger */
-public interface BeanInformation<T extends PropertyInformation<?>> {
-
-	/** @return  */
-	String getSimpleName();
-
-	String getName();
-
-	/** @return properties of this bean, no inherited Properties */
-	Collection<T> getProperties();
-
-	/** @return all properties, including inherited Properties */
-	Collection<T> getAllProperties();
-
-	BeanInformation<T> getSuperBeanInformation();
-
-	/**
-	 * @param string
-	 * @return
-	 */
-	T getProperty(String name);
+/**
+ * Enthält die Information von einem Property.
+ *
+ * @author Andreas Berger
+ */
+public interface PropertyInformation<T extends PropertyInformation<?>> {
 
 	<A extends Annotation> A getAnnotation(Class<A> annotationClass);
 
+	/** @return  */
+	String getName();
+
+	/** @return  */
+	String getTypeSimpleName();
+
+	/** @return  */
+	String getTypeQualifiedName();
+
+	/** @return  */
+	boolean isEnum();
+
+	/** @return  */
+	List<String> getEnumNames();
+
+	/**
+	 * @param clazz
+	 * @return
+	 */
 	boolean isTypeOfClass(Class<?> clazz);
 
+	/** @return  */
+	BeanInformation<T> getBeanInformation();
+
+	/** @return  */
+	String getDeclaringTypeSimpleName();
+
+	boolean isTransient();
 }

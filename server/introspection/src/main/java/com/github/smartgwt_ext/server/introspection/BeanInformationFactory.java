@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.smartgwt_ext.server.introspection.facade;
+package com.github.smartgwt_ext.server.introspection;
 
 import javax.lang.model.element.TypeElement;
 import java.lang.ref.SoftReference;

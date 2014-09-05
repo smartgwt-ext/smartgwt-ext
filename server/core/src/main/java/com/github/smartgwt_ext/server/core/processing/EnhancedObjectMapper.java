@@ -43,7 +43,10 @@ import com.fasterxml.jackson.databind.ser.SerializerFactory;
 import com.github.smartgwt_ext.server.core.HasIdField;
 import com.github.smartgwt_ext.server.core.annotations.DisplayField;
 import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
-import com.github.smartgwt_ext.server.introspection.facade.*;
+import com.github.smartgwt_ext.server.introspection.BeanInformation;
+import com.github.smartgwt_ext.server.introspection.BeanInformationFactory;
+import com.github.smartgwt_ext.server.introspection.PropertyInformation;
+import com.github.smartgwt_ext.server.introspection.PropertyInformationFromClass;
 
 import java.io.IOException;
 import java.io.Serializable;
