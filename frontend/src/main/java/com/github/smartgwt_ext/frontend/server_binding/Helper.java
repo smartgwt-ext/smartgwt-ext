@@ -17,7 +17,6 @@
 package com.github.smartgwt_ext.frontend.server_binding;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
@@ -25,10 +24,8 @@ import com.smartgwt.client.widgets.toolbar.ToolStripButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -94,14 +91,6 @@ public class Helper {
 		List<T> result = new ArrayList<T>();
 		for (Record record : records) {
 			result.add(Helper.<T>getOverlayType(record));
-		}
-		return result;
-	}
-
-	public static Map<String, String> getEnumMap(ConstantsWithLookup names, Enum<?>... values) {
-		Map<String, String> result = new LinkedHashMap<String, String>();
-		for (Enum<?> value : values) {
-			result.put(value.name(), names.getString(value.getDeclaringClass().getSimpleName() + "_" + value.name()));
 		}
 		return result;
 	}
