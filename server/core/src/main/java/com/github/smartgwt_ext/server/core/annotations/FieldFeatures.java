@@ -33,6 +33,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface FieldFeatures {
+	enum Password {
+		NONE, ENCRYPTED, HASHED
+	}
 
 	/**
 	 * Gibt an, ob das Feld im UI editierbar sein soll
@@ -49,13 +52,34 @@ public @interface FieldFeatures {
 	boolean hidden() default false;
 
 	/**
-	 * Gibt an, dass dieses Feld nicht an den Client übermittelt werden soll und
-	 * in der Anzeige ein Passwortfeld verwendet wird.
+	 * defines this field as an password field. The Data is not transferred to the client. A passowrd field will be used
+	 * for the GUI. Defaults to NONE.
 	 *
-	 * @return true, wenn das Feld ein Passwortfeld ist.
+	 * @return if not NONE a password field will be generated
 	 */
-	boolean password() default false;
+	Password password() default Password.NONE;
 
-	/** gibt an, dass dieses Feld nicht an das UI übertragen wird */
-	boolean ignore() default false;
+	/**
+	 * gibt an, dass dieses Feld nicht an das UI übertragen wird
+	 *
+	 * @deprecated use {@link UiIgnore}
+	 */
+	@Deprecated boolean ignore() default false;
+
+	boolean flatten() default false;
+
+	/**
+	 * @return if true, all fields will be transferred with the parent entity
+	 */
+	boolean transferAll() default false;
+
+	/**
+	 * @return if true, no display field will be transferred for the field
+	 */
+	boolean skipDisplayField() default false;
+
+	/**
+	 * @return if true, delegate field will be editable
+	 */
+	boolean delegateEditable() default false;
 }

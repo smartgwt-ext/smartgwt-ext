@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.smartgwt_ext.server.core.HasIdField;
 import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
+import com.github.smartgwt_ext.server.core.annotations.UiIgnore;
 import com.github.smartgwt_ext.server.core.processing.EnhancedObjectMapper;
 import com.github.smartgwt_ext.server.generation.model.JsDatasource;
 import com.github.smartgwt_ext.server.generation.model.JsDatasourceField;
@@ -177,7 +178,7 @@ public class DatasourceGenerator {
 				continue;
 			}
 			FieldFeatures features = prop.getAnnotation(FieldFeatures.class);
-			if (features != null && features.ignore()) {
+			if ((features != null && features.ignore()) || prop.getAnnotation(UiIgnore.class) != null) {
 				continue;
 			}
 			JsDatasourceField field = new JsDatasourceField();
@@ -337,7 +338,7 @@ public class DatasourceGenerator {
 
 	private String getType(PropertyInformation<?> inf) {
 		FieldFeatures features = inf.getAnnotation(FieldFeatures.class);
-		if (features != null && features.password()) {
+		if (features != null && features.password() != FieldFeatures.Password.NONE) {
 			return FieldType.PASSWORD.getValue();
 		}
 		if (inf.isTypeOfClass(String.class)) {

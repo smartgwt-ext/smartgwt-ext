@@ -18,8 +18,6 @@ package com.github.smartgwt_ext.server.generation.model;
 import com.smartgwt.client.types.ValidatorType;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
 public class JsValidator {
@@ -33,32 +31,44 @@ public class JsValidator {
 		this.type = type.getValue();
 	}
 
-	/** @return the type */
+	/**
+	 * @return the type
+	 */
 	public String getType() {
 		return type;
 	}
 
-	/** @param type the type to set */
+	/**
+	 * @param type the type to set
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	/** @return the min */
+	/**
+	 * @return the min
+	 */
 	public Integer getMin() {
 		return min;
 	}
 
-	/** @param min the min to set */
+	/**
+	 * @param min the min to set
+	 */
 	public void setMin(Integer min) {
 		this.min = min;
 	}
 
-	/** @return the max */
+	/**
+	 * @return the max
+	 */
 	public Integer getMax() {
 		return max;
 	}
 
-	/** @param max the max to set */
+	/**
+	 * @param max the max to set
+	 */
 	public void setMax(Integer max) {
 		this.max = max;
 	}

@@ -24,7 +24,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Bestimmt, welches Feld den Anzeigenamen enthält
+ * Says that this property should be ignored in the UI (it will not be transferred)
  *
  * @author Andreas Berger
  * @created 24.10.12 - 14:42
@@ -32,5 +32,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface DisplayField {
+public @interface UiIgnore {
 }

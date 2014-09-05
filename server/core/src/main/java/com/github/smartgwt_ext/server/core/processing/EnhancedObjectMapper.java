@@ -43,6 +43,7 @@ import com.fasterxml.jackson.databind.ser.SerializerFactory;
 import com.github.smartgwt_ext.server.core.HasIdField;
 import com.github.smartgwt_ext.server.core.annotations.DisplayField;
 import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
+import com.github.smartgwt_ext.server.core.annotations.UiIgnore;
 import com.github.smartgwt_ext.server.introspection.BeanInformation;
 import com.github.smartgwt_ext.server.introspection.BeanInformationFactory;
 import com.github.smartgwt_ext.server.introspection.PropertyInformation;
@@ -102,11 +103,11 @@ public abstract class EnhancedObjectMapper {
 					SettableBeanProperty prop = iterator.next();
 					FieldFeatures features = prop.getAnnotation(FieldFeatures.class);
 					if (features != null) {
-						if (features.ignore()) {
+						if (features.ignore() || prop.getAnnotation(UiIgnore.class) != null) {
 							iterator.remove();
 							continue;
 						}
-						if (features.password()) {
+						if (features.password() != FieldFeatures.Password.NONE) {
 							modified.add(new PasswordDeserializer(prop, beanDesc));
 							continue;
 						}
@@ -144,11 +145,11 @@ public abstract class EnhancedObjectMapper {
 					BeanPropertyWriter beanProperty = iterator.next();
 					FieldFeatures features = beanProperty.getAnnotation(FieldFeatures.class);
 					if (features != null) {
-						if (features.ignore()) {
+						if (features.ignore() || beanProperty.getAnnotation(UiIgnore.class) != null) {
 							iterator.remove();
 							continue;
 						}
-						if (features.password()) {
+						if (features.password() != FieldFeatures.Password.NONE) {
 							beanProperty.assignSerializer(new PasswordSerializer());
 							continue;
 						}

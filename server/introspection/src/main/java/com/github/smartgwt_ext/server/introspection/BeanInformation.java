@@ -52,4 +52,8 @@ public interface BeanInformation<T extends PropertyInformation<?>> {
 
 	boolean isTypeOfClass(Class<?> clazz);
 
+	T getAnnotatedProperty(Class<? extends Annotation> annotation);
+
+	Collection<T> getAnnotatedProperties(Class<? extends Annotation> annotation);
+
 }

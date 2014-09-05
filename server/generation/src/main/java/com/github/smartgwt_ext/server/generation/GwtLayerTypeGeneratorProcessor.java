@@ -17,34 +17,34 @@ package com.github.smartgwt_ext.server.generation;
 
 import com.github.smartgwt_ext.server.core.annotations.GenerateUiInformation;
 import com.sun.codemodel.CodeWriter;
-import com.sun.codemodel.JPackage;
+import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedOptions;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-import static com.github.smartgwt_ext.server.generation.GwtLayerTypeGeneratorProcessor.PARAM_DESTINATION_PACKAGE;
-import static com.github.smartgwt_ext.server.generation.GwtLayerTypeGeneratorProcessor.PARAM_SOURCE_PACKAGE;
+import static com.github.smartgwt_ext.server.generation.GwtLayerTypeGeneratorProcessor.*;
 
 /**
  * @author Andreas Berger
  * @created 07.01.2013
  */
 @SupportedAnnotationTypes("com.github.smartgwt_ext.server.core.annotations.GenerateUiInformation")
-@SupportedOptions({PARAM_SOURCE_PACKAGE, PARAM_DESTINATION_PACKAGE})
+@SupportedOptions(
+		{PARAM_SOURCE_PACKAGE, PARAM_DESTINATION_PACKAGE, PARAM_LAYER_HANDLER_CLASS, PARAM_LAYER_BASE_CLASS})
 @SupportedSourceVersion(SourceVersion.RELEASE_5)
 public class GwtLayerTypeGeneratorProcessor extends AbstractProcessor {
 
 	public static final String PARAM_SOURCE_PACKAGE = "sourcePackage";
 	public static final String PARAM_DESTINATION_PACKAGE = "destinationPackage";
+	public static final String PARAM_LAYER_HANDLER_CLASS = "layerHandlerClass";
+	public static final String PARAM_LAYER_BASE_CLASS = "layerBaseClass";
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -52,28 +52,47 @@ public class GwtLayerTypeGeneratorProcessor extends AbstractProcessor {
 			return false;
 		}
 		try {
-			String sourcePackage = processingEnv.getOptions().get(PARAM_SOURCE_PACKAGE).trim();
-			String destinationPackage = processingEnv.getOptions().get(PARAM_DESTINATION_PACKAGE).trim();
-
-			GwtLayerTypeGenerator generator = new GwtLayerTypeGenerator(sourcePackage, destinationPackage);
-
-			final Filer filer = processingEnv.getFiler();
-			CodeWriter writer = new CodeWriter() {
-
-				@Override
-				public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
-					return filer.createSourceFile(pkg.name() + "." + fileName.replace(".java", "")).openOutputStream();
-				}
-
-				@Override
-				public void close() throws IOException {
-				}
-			};
+			GwtLayerTypeGenerator generator = new GwtLayerTypeGenerator(getLayerNameResolver(), getLayerBaseClass());
+			CodeWriter writer = new FilerCodeWriter(processingEnv.getFiler());
 			generator.process(writer, roundEnv.getElementsAnnotatedWith(GenerateUiInformation.class));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		return true;
+	}
+
+	private String getLayerBaseClass() {
+		String layerBaseClass = processingEnv.getOptions().get(PARAM_LAYER_BASE_CLASS);
+		if (StringUtils.isNotBlank(layerBaseClass)) {
+			layerBaseClass = layerBaseClass.trim();
+		} else {
+			layerBaseClass = "com.github.smartgwt_ext.frontend.server_binding.layer.JsBase";
+		}
+		return layerBaseClass;
+	}
+
+	private LayerHandler getLayerNameResolver()
+			throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException,
+			ClassNotFoundException {
+		String sourcePackage = processingEnv.getOptions().get(PARAM_SOURCE_PACKAGE);
+		if (sourcePackage != null) {
+			sourcePackage = sourcePackage.trim();
+		}
+		String destinationPackage = processingEnv.getOptions().get(PARAM_DESTINATION_PACKAGE);
+		if (destinationPackage != null) {
+			destinationPackage = destinationPackage.trim();
+		}
+		String datasourceNameResolverClass = processingEnv.getOptions().get(PARAM_LAYER_HANDLER_CLASS);
+		LayerHandler layerHandler = null;
+		if (StringUtils.isNotBlank(datasourceNameResolverClass)) {
+			layerHandler = (LayerHandler) Class.forName(datasourceNameResolverClass.trim())
+					.getConstructor(String.class, String.class)
+					.newInstance(sourcePackage, destinationPackage);
+		}
+		if (layerHandler == null) {
+			layerHandler = new LayerHandler(sourcePackage, destinationPackage);
+		}
+		return layerHandler;
 	}
 }

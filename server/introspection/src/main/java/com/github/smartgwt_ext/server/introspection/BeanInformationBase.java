@@ -15,8 +15,11 @@
  */
 package com.github.smartgwt_ext.server.introspection;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -76,6 +79,26 @@ public abstract class BeanInformationBase<T extends PropertyInformation<?>> impl
 	public T getProperty(String name) {
 		initAllProperties();
 		return allProperties.get(name);
+	}
+
+	@Override
+	public T getAnnotatedProperty(Class<? extends Annotation> annotation) {
+		Collection<T> result = getAnnotatedProperties(annotation);
+		if (result.isEmpty()) {
+			return null;
+		}
+		return result.iterator().next();
+	}
+
+	@Override
+	public Collection<T> getAnnotatedProperties(Class<? extends Annotation> annotation) {
+		List<T> result = new ArrayList<T>();
+		for (T t : getAllProperties()) {
+			if (t.getAnnotation(annotation) != null) {
+				result.add(t);
+			}
+		}
+		return result;
 	}
 
 	@Override

@@ -18,39 +18,62 @@ package com.github.smartgwt_ext.server.generation.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
-@JsonPropertyOrder({"id", "fields"})
+@JsonPropertyOrder({"id", "inheritsFrom", "fields"})
 public class JsDatasource {
 
 	@JsonProperty("ID")
 	private String id;
 
+	private String inheritsFrom;
+
 	private List<JsDatasourceField> fields;
 
-	/** @return the id */
+	/**
+	 * @return the id
+	 */
 	public String getId() {
 		return id;
 	}
 
-	/** @param id the id to set */
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/** @return the fields */
+	/**
+	 * @return the fields
+	 */
 	public List<JsDatasourceField> getFields() {
 		return fields;
 	}
 
-	/** @param fields the fields to set */
+	/**
+	 * @param fields the fields to set
+	 */
 	public void setFields(List<JsDatasourceField> fields) {
 		this.fields = fields;
 	}
 
+	public String getInheritsFrom() {
+		return inheritsFrom;
+	}
+
+	public void setInheritsFrom(String inheritsFrom) {
+		this.inheritsFrom = inheritsFrom;
+	}
+
+	public void addField(JsDatasourceField value) {
+		if (fields == null) {
+			this.fields = new ArrayList<JsDatasourceField>();
+		}
+		this.fields.add(value);
+	}
 }

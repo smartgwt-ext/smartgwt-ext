@@ -15,13 +15,15 @@
  */
 package com.github.smartgwt_ext.server.generation.model;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * // TODO Comment me!
- *
  * @author Andreas Berger
  */
 public class JsDatasourceField {
@@ -41,93 +43,133 @@ public class JsDatasourceField {
 	private Boolean canSave;
 	private Map<String, Object> valueMap;
 	private List<JsValidator> validators;
+	private Boolean multiple;
+	private Boolean allowEmptyValue;
+	private String extPath;
+	protected Map<String, Object> other = new HashMap<String, Object>();
 
-	/** @return the name */
+	/**
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
-	/** @param name the name to set */
+	/**
+	 * @param name the name to set
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/** @return the title */
+	/**
+	 * @return the title
+	 */
 	public String getTitle() {
 		return title;
 	}
 
-	/** @param title the title to set */
+	/**
+	 * @param title the title to set
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	/** @return the primaryKey */
+	/**
+	 * @return the primaryKey
+	 */
 	public Boolean getPrimaryKey() {
 		return primaryKey;
 	}
 
-	/** @param primaryKey the primaryKey to set */
+	/**
+	 * @param primaryKey the primaryKey to set
+	 */
 	public void setPrimaryKey(Boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
 
-	/** @return the hidden */
+	/**
+	 * @return the hidden
+	 */
 	public Boolean getHidden() {
 		return hidden;
 	}
 
-	/** @param hidden the hidden to set */
+	/**
+	 * @param hidden the hidden to set
+	 */
 	public void setHidden(Boolean hidden) {
 		this.hidden = hidden;
 	}
 
-	/** @return the type */
+	/**
+	 * @return the type
+	 */
 	public String getType() {
 		return type;
 	}
 
-	/** @param type the type to set */
+	/**
+	 * @param type the type to set
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
 
-	/** @return the prompt */
+	/**
+	 * @return the prompt
+	 */
 	public String getPrompt() {
 		return prompt;
 	}
 
-	/** @param prompt the prompt to set */
+	/**
+	 * @param prompt the prompt to set
+	 */
 	public void setPrompt(String prompt) {
 		this.prompt = prompt;
 	}
 
-	/** @return the required */
+	/**
+	 * @return the required
+	 */
 	public Boolean getRequired() {
 		return required;
 	}
 
-	/** @param required the required to set */
+	/**
+	 * @param required the required to set
+	 */
 	public void setRequired(Boolean required) {
 		this.required = required;
 	}
 
-	/** @return the length */
+	/**
+	 * @return the length
+	 */
 	public Integer getLength() {
 		return length;
 	}
 
-	/** @param length the length to set */
+	/**
+	 * @param length the length to set
+	 */
 	public void setLength(Integer length) {
 		this.length = length;
 	}
 
-	/** @return the validators */
+	/**
+	 * @return the validators
+	 */
 	public List<JsValidator> getValidators() {
 		return validators;
 	}
 
-	/** @param validators the validators to set */
+	/**
+	 * @param validators the validators to set
+	 */
 	public void setValidators(List<JsValidator> validators) {
 		this.validators = validators;
 	}
@@ -139,73 +181,135 @@ public class JsDatasourceField {
 		validators.add(validator);
 	}
 
-	/** @param foreignKey the foreignKey to set */
+	/**
+	 * @param foreignKey the foreignKey to set
+	 */
 	public void setForeignKey(String foreignKey) {
 		this.foreignKey = foreignKey;
 	}
 
-	/** @return the foreignKey */
+	/**
+	 * @return the foreignKey
+	 */
 	public String getForeignKey() {
 		return foreignKey;
 	}
 
-	/** @param displayField the displayField to set */
+	/**
+	 * @param displayField the displayField to set
+	 */
 	public void setDisplayField(String displayField) {
 		this.displayField = displayField;
 	}
 
-	/** @return the displayField */
+	/**
+	 * @return the displayField
+	 */
 	public String getDisplayField() {
 		return displayField;
 	}
 
-	/** @param editorType the editorType to set */
+	/**
+	 * @param editorType the editorType to set
+	 */
 	public void setEditorType(String editorType) {
 		this.editorType = editorType;
 	}
 
-	/** @return the editorType */
+	/**
+	 * @return the editorType
+	 */
 	public String getEditorType() {
 		return editorType;
 	}
 
-	/** @param editorProperties the editorProperties to set */
+	/**
+	 * @param editorProperties the editorProperties to set
+	 */
 	public void setEditorProperties(Map<String, Object> editorProperties) {
 		this.editorProperties = editorProperties;
 	}
 
-	/** @return the editorProperties */
+	/**
+	 * @return the editorProperties
+	 */
 	public Map<String, Object> getEditorProperties() {
 		return editorProperties;
 	}
 
-	/** @return the canEdit */
+	/**
+	 * @return the canEdit
+	 */
 	public Boolean getCanEdit() {
 		return canEdit;
 	}
 
-	/** @param canEdit the canEdit to set */
+	/**
+	 * @param canEdit the canEdit to set
+	 */
 	public void setCanEdit(Boolean canEdit) {
 		this.canEdit = canEdit;
 	}
 
-	/** @return the canSave */
+	/**
+	 * @return the canSave
+	 */
 	public Boolean getCanSave() {
 		return canSave;
 	}
 
-	/** @param canSave the canSave to set */
+	/**
+	 * @param canSave the canSave to set
+	 */
 	public void setCanSave(Boolean canSave) {
 		this.canSave = canSave;
 	}
 
-	/** @param valueMap the valueMap to set */
+	/**
+	 * @param valueMap the valueMap to set
+	 */
 	public void setValueMap(Map<String, Object> valueMap) {
 		this.valueMap = valueMap;
 	}
 
-	/** @return the valueMap */
+	/**
+	 * @return the valueMap
+	 */
 	public Map<String, Object> getValueMap() {
 		return valueMap;
+	}
+
+	public void setMultiple(Boolean multiple) {
+		this.multiple = multiple;
+	}
+
+	public Boolean isMultiple() {
+		return multiple;
+	}
+
+	public void setExtPath(String extPath) {
+		this.extPath = extPath;
+	}
+
+	public String getExtPath() {
+		return extPath;
+	}
+
+	public Boolean getAllowEmptyValue() {
+		return allowEmptyValue;
+	}
+
+	public void setAllowEmptyValue(Boolean allowEmptyValue) {
+		this.allowEmptyValue = allowEmptyValue;
+	}
+
+	@JsonAnyGetter
+	public Map<String, Object> any() {
+		return other;
+	}
+
+	@JsonAnySetter
+	public void set(String name, Object value) {
+		other.put(name, value);
 	}
 }
