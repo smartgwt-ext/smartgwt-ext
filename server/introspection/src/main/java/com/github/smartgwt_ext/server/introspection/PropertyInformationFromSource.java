@@ -152,6 +152,11 @@ public class PropertyInformationFromSource extends PropertyInformationBase<Prope
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public BeanInformation<PropertyInformationFromSource> getDeclaringTypeBeanInformation() {
+		return BeanInformationFactory.createBeanInformation(declaringElement);
+	}
+
 	/**
 	 * @param declaringElement the declaringElement to set
 	 */

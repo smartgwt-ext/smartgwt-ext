@@ -72,4 +72,7 @@ public interface PropertyInformation<T extends PropertyInformation<?>> {
 	boolean isTransient();
 
 	void setValue(Object bean, Object value) throws InvocationTargetException, IllegalAccessException;
+
+	public BeanInformation<T> getDeclaringTypeBeanInformation();
+
 }

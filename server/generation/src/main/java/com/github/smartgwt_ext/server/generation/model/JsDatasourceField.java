@@ -45,7 +45,7 @@ public class JsDatasourceField {
 	private List<JsValidator> validators;
 	private Boolean multiple;
 	private Boolean allowEmptyValue;
-	private String extPath;
+	private String accessPath;
 	protected Map<String, Object> other = new HashMap<String, Object>();
 
 	/**
@@ -287,12 +287,12 @@ public class JsDatasourceField {
 		return multiple;
 	}
 
-	public void setExtPath(String extPath) {
-		this.extPath = extPath;
+	public void setAccessPath(String accessPath) {
+		this.accessPath = accessPath;
 	}
 
-	public String getExtPath() {
-		return extPath;
+	public String getAccessPath() {
+		return accessPath;
 	}
 
 	public Boolean getAllowEmptyValue() {

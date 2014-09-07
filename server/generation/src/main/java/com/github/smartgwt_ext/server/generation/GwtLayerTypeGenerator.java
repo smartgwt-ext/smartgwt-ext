@@ -124,15 +124,12 @@ public class GwtLayerTypeGenerator {
 					//don't override existing property
 					continue;
 				}
-				FieldFeatures features = prop.getAnnotation(FieldFeatures.class);
 				if (AnnotationHelper.shouldIgnore(prop)) {
-					if (prop.getAnnotation(Id.class) != null) {
-						theClass.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class,
-								getFieldNameConstant(prop.getName())).init(JExpr.lit(prop.getName()));
+					if (prop.getAnnotation(Id.class) == null) {
+						continue;
 					}
-					continue;
 				}
-
+				FieldFeatures features = prop.getAnnotation(FieldFeatures.class);
 				theClass.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class,
 						getFieldNameConstant(prop.getName())).init(JExpr.lit(prop.getName()));
 				if (prop.getBeanInformation() != null && prop.getBeanInformation().isTypeOfClass(Enum.class)) {
@@ -148,30 +145,33 @@ public class GwtLayerTypeGenerator {
 				String type = prop.getTypeQualifiedName();
 				BeanInformation<?> referenceType = prop.getBeanInformation();
 				if (referenceType != null) {
-					PropertyInformation<?> displayFieldProperty = referenceType.getAnnotatedProperty(
-							DisplayField.class);
-					if (displayFieldProperty != null) {
-						String converterMethodName = getConverterMethodName(displayFieldProperty
-								.getTypeQualifiedName());
-						if (converterMethodName != null) {
-							addGetter(MODS,
-									theClass,
-									getterName + "DisplayField",
-									field + "_" + displayFieldProperty.getName(),
-									cm.ref(displayFieldProperty.getTypeQualifiedName()),
-									converterMethodName);
+					PropertyInformation<?> displayField = prop.getBeanInformation()
+							.getAnnotatedProperty(DisplayField.class);
+					GenerateUiInformation uiInformation = referenceType.getAnnotation(GenerateUiInformation.class);
+					if (uiInformation != null && uiInformation.reduceToDisplayField()) {
+						type = displayField.getTypeQualifiedName();
+					} else {
+						if (displayField != null) {
+							String converterMethodName = getConverterMethodName(displayField.getTypeQualifiedName());
+							if (converterMethodName != null) {
+								addGetter(MODS,
+										theClass,
+										getterName + "DisplayField",
+										field + "_" + displayField.getName(),
+										cm.ref(displayField.getTypeQualifiedName()),
+										converterMethodName);
+							}
+						}
+						// TODO use @Id
+						if (referenceType.getProperty("id") != null) {
+							type = referenceType.getProperty("id").getTypeQualifiedName();
+						}
+						if (uiInformation != null) {
+							addDelegate(MODS, theClass, getterName + "Js", field,
+									cm.ref(layerHandler.resolveLayerName(referenceType)));
 						}
 					}
-					// TODO use @Id
-					if (referenceType.getProperty("id") != null) {
-						type = referenceType.getProperty("id").getTypeQualifiedName();
-					}
-					if (referenceType.getAnnotation(GenerateUiInformation.class) != null) {
-						addDelegate(MODS, theClass, getterName + "Js", field,
-								cm.ref(layerHandler.resolveLayerName(referenceType)));
-					}
 				}
-				type = layerHandler.getLayerType(type);
 				String converterMethodName = getConverterMethodName(type);
 				if (converterMethodName == null) {
 					continue;

@@ -20,7 +20,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.CLASS;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Markiert eine Klasse, für die eine Datasource für das SmartGWT-UI generiert
@@ -30,7 +30,10 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
  */
 @Documented
 @Target(TYPE)
-@Retention(CLASS)
+@Retention(RUNTIME)
 public @interface GenerateUiInformation {
-
+	/**
+	 * @return true, to use only the display field of this type.
+	 */
+	boolean reduceToDisplayField() default false;
 }

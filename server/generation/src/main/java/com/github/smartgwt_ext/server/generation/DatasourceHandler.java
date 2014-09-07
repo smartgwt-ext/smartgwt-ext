@@ -16,16 +16,28 @@
 
 package com.github.smartgwt_ext.server.generation;
 
+import com.github.smartgwt_ext.server.generation.model.JsDatasourceField;
 import com.github.smartgwt_ext.server.introspection.BeanInformation;
+import com.github.smartgwt_ext.server.introspection.PropertyInformation;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 /**
- * @author Andreas Berger (latest modification by $Author$)
- * @version $Id$
- * @created 05.09.14 - 15:56
+ * @author Andreas Berger
+ * @created 06.09.14 - 21:52
  */
-public class I18nKeyResolver {
+public class DatasourceHandler {
 
-	public String getKey(BeanInformation<?> bean, String propertyName) {
-		return bean.getSimpleName() + "_" + propertyName;
+	public String resolveDataSourceName(BeanInformation<?> beanInformation) {
+		return beanInformation.getSimpleName();
+	}
+
+	public Map<Class<?>, Collection<String[]>> getDelegateFields() {
+		return Collections.emptyMap();
+	}
+
+	public void handleCustomExtensions(PropertyInformation<?> prop, JsDatasourceField field) {
 	}
 }

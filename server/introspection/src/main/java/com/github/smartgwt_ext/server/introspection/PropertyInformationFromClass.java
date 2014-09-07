@@ -157,6 +157,11 @@ public class PropertyInformationFromClass extends PropertyInformationBase<Proper
 		throw new IllegalStateException("No setter or field available");
 	}
 
+	@Override
+	public BeanInformation<PropertyInformationFromClass> getDeclaringTypeBeanInformation() {
+		return BeanInformationFactory.createBeanInformation(declaringType);
+	}
+
 	/**
 	 * @param annotations
 	 */
