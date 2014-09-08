@@ -16,16 +16,12 @@
 
 package com.github.smartgwt_ext.frontend.server_binding;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.smartgwt.client.data.Record;
 import com.smartgwt.client.widgets.events.ClickHandler;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.client.widgets.toolbar.ToolStripButton;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -59,39 +55,6 @@ public class Helper {
 	public static <T> Set<T> transformToSet(T... obj) {
 		Set<T> result = new LinkedHashSet<T>();
 		Collections.addAll(result, obj);
-		return result;
-	}
-
-	/**
-	 * Liefert den GWT OverlayType für ein bestimmten Record zurück.
-	 *
-	 * @param <T> der Typ des OverlayTypes
-	 * @param record der Record
-	 * @return den OverlayType
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T extends JavaScriptObject> T getOverlayType(Record record) {
-		if (record == null) {
-			return null;
-		}
-		return (T) record.getJsObj();
-	}
-
-	/**
-	 * Liefert ein Array von GWT OverlayTypes für ein Record Array zurück.
-	 *
-	 * @param <T> der Typ des OverlayTypes
-	 * @param records das Record-Array
-	 * @return ein Array mit den OverlayTypes
-	 */
-	public static <T extends JavaScriptObject> List<T> getOverlayTypes(Record... records) {
-		if (records == null) {
-			return null;
-		}
-		List<T> result = new ArrayList<T>();
-		for (Record record : records) {
-			result.add(Helper.<T>getOverlayType(record));
-		}
 		return result;
 	}
 }

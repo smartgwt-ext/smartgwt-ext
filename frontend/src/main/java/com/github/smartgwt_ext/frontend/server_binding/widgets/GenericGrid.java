@@ -18,6 +18,7 @@ package com.github.smartgwt_ext.frontend.server_binding.widgets;
 import com.github.smartgwt_ext.frontend.server_binding.Helper;
 import com.github.smartgwt_ext.frontend.server_binding.i18n.ComonMessages;
 import com.github.smartgwt_ext.frontend.server_binding.i18n.ServerBindingStrings;
+import com.github.smartgwt_ext.frontend.server_binding.layer.JsBase;
 import com.github.smartgwt_ext.frontend.server_binding.widgets.data.DataSelectionListener;
 import com.github.smartgwt_ext.frontend.server_binding.widgets.data.DataSelectionListenerCollection;
 import com.google.gwt.core.client.GWT;
@@ -27,45 +28,23 @@ import com.smartgwt.client.core.Function;
 import com.smartgwt.client.data.DataSource;
 import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.Record;
-import com.smartgwt.client.types.AutoFitWidthApproach;
-import com.smartgwt.client.types.ListGridComponent;
-import com.smartgwt.client.types.ListGridEditEvent;
-import com.smartgwt.client.types.RowEndEditAction;
+import com.smartgwt.client.types.*;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.StretchImgButton;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.events.DrawEvent;
-import com.smartgwt.client.widgets.events.DrawHandler;
-import com.smartgwt.client.widgets.events.ScrolledEvent;
-import com.smartgwt.client.widgets.events.ScrolledHandler;
+import com.smartgwt.client.widgets.events.*;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
-import com.smartgwt.client.widgets.grid.events.DataArrivedEvent;
-import com.smartgwt.client.widgets.grid.events.DataArrivedHandler;
-import com.smartgwt.client.widgets.grid.events.EditorExitEvent;
-import com.smartgwt.client.widgets.grid.events.EditorExitHandler;
-import com.smartgwt.client.widgets.grid.events.RecordClickEvent;
-import com.smartgwt.client.widgets.grid.events.RecordClickHandler;
-import com.smartgwt.client.widgets.grid.events.RecordDoubleClickEvent;
-import com.smartgwt.client.widgets.grid.events.RecordDoubleClickHandler;
-import com.smartgwt.client.widgets.grid.events.SelectionUpdatedEvent;
-import com.smartgwt.client.widgets.grid.events.SelectionUpdatedHandler;
+import com.smartgwt.client.widgets.grid.events.*;
 import com.smartgwt.client.widgets.layout.LayoutSpacer;
 import com.smartgwt.client.widgets.layout.SectionStack;
 import com.smartgwt.client.widgets.layout.SectionStackSection;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.client.widgets.toolbar.ToolStripButton;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * AdminGrid contains the main properties of all admin tables
@@ -123,6 +102,8 @@ public class GenericGrid<T extends JavaScriptObject> extends ListGrid {
 
 	private DataSelectionListenerCollection<T> selectionListener;
 	private HandlerRegistration recordClickHandlerRegistration;
+
+	private ListGridRecord selectedRecord;
 
 	public GenericGrid(String datasource, String id) {
 		this(DataSource.get(datasource), id);
@@ -313,14 +294,24 @@ public class GenericGrid<T extends JavaScriptObject> extends ListGrid {
 	}
 
 	private void onRecordDoubleClick(RecordDoubleClickEvent event) {
+		if (getSelectionAppearance() == SelectionAppearance.CHECKBOX) {
+			selectedRecord = getRecord(event.getRecordNum());
+		}
 		if (!editInGrid && canEdit) {
-			selectRecord(event.getRecordNum());
 			onEdit();
 		}
 	}
 
 	protected void onEdit() {
 		openEditorWindow().editSelectedData();
+	}
+
+	@Override
+	public ListGridRecord getSelectedRecord() {
+		if (getSelectionAppearance() == SelectionAppearance.CHECKBOX) {
+			return selectedRecord;
+		}
+		return super.getSelectedRecord();
 	}
 
 	protected ListGridRecord initNewRecord() {
@@ -527,7 +518,9 @@ public class GenericGrid<T extends JavaScriptObject> extends ListGrid {
 		return getSection();
 	}
 
-	/** @return Liefert den Explorer mit einer Überschrift zurück. */
+	/**
+	 * @return Liefert den Explorer mit einer Überschrift zurück.
+	 */
 	public SectionStack getTitledPanel() {
 		if (sectionStack == null) {
 			sectionStack = new SectionStack();
@@ -677,11 +670,11 @@ public class GenericGrid<T extends JavaScriptObject> extends ListGrid {
 	}
 
 	public T getElement(Record r) {
-		return Helper.<T>getOverlayType(getSelectedRecord());
+		return JsBase.<T>transformRecord(getSelectedRecord());
 	}
 
-	public List<T> getElements(Record[] records) {
-		return Helper.<T>getOverlayTypes(records);
+	public List<T> getElements(Record... records) {
+		return JsBase.<T>transformRecords(records);
 	}
 
 	public T getSelectedElement() {

@@ -6,9 +6,12 @@ package com.github.smartgwt_ext.frontend.server_binding.layer;
 
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.smartgwt.client.data.Record;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Andreas Berger
@@ -212,4 +215,37 @@ public class JsBase extends JavaScriptObject implements Serializable {
         return {__base: this.__base ? this.__base : this, __prefix: (this.__prefix ? this.__prefix : '') + prefix + '_'}
     }-*/;
 
+
+	/**
+	 * Liefert den GWT OverlayType für ein bestimmten Record zurück.
+	 *
+	 * @param <T> der Typ des OverlayTypes
+	 * @param record der Record
+	 * @return den OverlayType
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends JavaScriptObject> T transformRecord(Record record) {
+		if (record == null) {
+			return null;
+		}
+		return (T) record.getJsObj();
+	}
+
+	/**
+	 * Liefert ein Array von GWT OverlayTypes für ein Record Array zurück.
+	 *
+	 * @param <T> der Typ des OverlayTypes
+	 * @param records das Record-Array
+	 * @return ein Array mit den OverlayTypes
+	 */
+	public static <T extends JavaScriptObject> List<T> transformRecords(Record... records) {
+		if (records == null) {
+			return null;
+		}
+		List<T> result = new ArrayList<T>();
+		for (Record record : records) {
+			result.add(JsBase.<T>transformRecord(record));
+		}
+		return result;
+	}
 }

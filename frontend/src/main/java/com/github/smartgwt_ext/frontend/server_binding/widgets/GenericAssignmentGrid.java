@@ -19,6 +19,7 @@ package com.github.smartgwt_ext.frontend.server_binding.widgets;
 import com.github.smartgwt_ext.frontend.server_binding.Helper;
 import com.github.smartgwt_ext.frontend.server_binding.datasource.Relationship;
 import com.github.smartgwt_ext.frontend.server_binding.i18n.ServerBindingStrings;
+import com.github.smartgwt_ext.frontend.server_binding.layer.JsBase;
 import com.github.smartgwt_ext.frontend.server_binding.widgets.data.DataSelectionListenerAdapter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -112,7 +113,7 @@ public class GenericAssignmentGrid<S extends JavaScriptObject, A extends JavaScr
 		boolean isQueuing = RPCManager.startQueue();
 		try {
 			currentSelectedRecord = selectedRecord;
-			onUpdateSelection(Helper.<S>getOverlayType(selectedRecord), selectedRecord);
+			onUpdateSelection(JsBase.<S>transformRecord(selectedRecord), selectedRecord);
 			if (selectedRecord == null) {
 				setDisabled(true);
 				hideButton(getReloadButton(), true);
@@ -381,7 +382,7 @@ public class GenericAssignmentGrid<S extends JavaScriptObject, A extends JavaScr
 	}
 
 	public S getCurrentSelectedElement() {
-		return Helper.<S>getOverlayType(currentSelectedRecord);
+		return JsBase.<S>transformRecord(currentSelectedRecord);
 	}
 
 	public void setDragField(String dragField) {
