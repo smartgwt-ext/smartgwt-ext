@@ -16,22 +16,17 @@
 
 package com.github.smartgwt_ext.server.core.processing;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-
-import java.io.IOException;
-
 /**
  * @author Andreas Berger
- * @created 13.02.2013
+ * @created 08.09.14 - 21:36
  */
-public class PasswordSerializer extends JsonSerializer<Object> {
+public interface PasswordHandler {
 
-	public static final String PASSWORD_UNCHANGED = "_pw_unchanged";
-
-	@Override
-	public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-		jgen.writeString(PASSWORD_UNCHANGED);
-	}
+	/**
+	 * encrypts or hashes a plainTextPassword.
+	 *
+	 * @param plainTextPassword
+	 * @return the encrypted or hashed password
+	 */
+	String transform(String plainTextPassword);
 }

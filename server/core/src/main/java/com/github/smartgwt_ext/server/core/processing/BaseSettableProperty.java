@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.smartgwt_ext.server.core.processing;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
@@ -34,10 +37,20 @@ import java.lang.annotation.Annotation;
  */
 abstract class BaseSettableProperty extends SettableBeanProperty {
 
-	protected JsonDeserializer<?> deser;
 	protected SettableBeanProperty delegate;
 	protected AnnotatedMethod getter;
 	protected AnnotatedMethod setter;
+
+	protected BaseSettableProperty(BaseSettableProperty delegate, JsonDeserializer<?> deser) {
+		super(delegate, deser);
+		this.delegate = delegate.delegate;
+		getter = delegate.getter;
+		setter = delegate.setter;
+	}
+
+	protected BaseSettableProperty(String propName, JavaType type) {
+		super(new PropertyName(propName), type, null, null);
+	}
 
 	protected BaseSettableProperty(SettableBeanProperty src, BeanDescription beanDesc) {
 		super(src);
@@ -71,7 +84,7 @@ abstract class BaseSettableProperty extends SettableBeanProperty {
 		if (jp.getCurrentToken() == JsonToken.VALUE_NULL) {
 			value = null;
 		} else {
-			value = deser.deserialize(jp, ctxt);
+			value = getValueDeserializer().deserialize(jp, ctxt);
 		}
 		return setAndReturn(instance, value);
 	}
@@ -79,12 +92,6 @@ abstract class BaseSettableProperty extends SettableBeanProperty {
 	@Override
 	public void set(Object instance, Object value) throws IOException {
 		setAndReturn(instance, value);
-	}
-
-	@Override
-	public SettableBeanProperty withValueDeserializer(JsonDeserializer<?> deser) {
-		this.deser = deser;
-		return this;
 	}
 
 	@Override

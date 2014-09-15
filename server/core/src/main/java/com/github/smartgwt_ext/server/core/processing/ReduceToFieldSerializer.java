@@ -19,19 +19,30 @@ package com.github.smartgwt_ext.server.core.processing;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.github.smartgwt_ext.server.introspection.PropertyInformationFromClass;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Andreas Berger
- * @created 13.02.2013
+ * @created 26.11.12 - 19:35
  */
-public class PasswordSerializer extends JsonSerializer<Object> {
+class ReduceToFieldSerializer extends JsonSerializer<Object> {
+	private PropertyInformationFromClass prop;
 
-	public static final String PASSWORD_UNCHANGED = "_pw_unchanged";
+	ReduceToFieldSerializer(PropertyInformationFromClass prop) {
+		this.prop = prop;
+	}
 
 	@Override
 	public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-		jgen.writeString(PASSWORD_UNCHANGED);
+		try {
+			jgen.writeObject(prop.getGetter().invoke(value));
+		} catch (IllegalAccessException e) {
+			throw new IOException(e);
+		} catch (InvocationTargetException e) {
+			throw new IOException(e);
+		}
 	}
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.smartgwt_ext.server.core.processing;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -48,7 +49,9 @@ public abstract class SmartGwtRequestContext {
 	private ObjectMapper mapper;
 	private EntityByDatasourceResolver entityResolver;
 
-	/** @param entityResolver */
+	/**
+	 * @param entityResolver
+	 */
 	public SmartGwtRequestContext(EntityByDatasourceResolver entityResolver) {
 		this.entityResolver = entityResolver;
 	}

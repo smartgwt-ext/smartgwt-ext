@@ -14,24 +14,33 @@
  * limitations under the License.
  */
 
-package com.github.smartgwt_ext.server.core.processing;
+package com.github.smartgwt_ext.server.core.processing.entities;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-
-import java.io.IOException;
+import com.github.smartgwt_ext.server.core.annotations.DisplayField;
+import com.github.smartgwt_ext.server.core.annotations.GenerateUiInformation;
 
 /**
  * @author Andreas Berger
- * @created 13.02.2013
+ * @created 13.09.14 - 23:14
  */
-public class PasswordSerializer extends JsonSerializer<Object> {
+@GenerateUiInformation(reduceToDisplayField = true)
+public class ReduceToDisplayField {
 
-	public static final String PASSWORD_UNCHANGED = "_pw_unchanged";
+	@DisplayField
+	private String foo;
 
-	@Override
-	public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
-		jgen.writeString(PASSWORD_UNCHANGED);
+	public ReduceToDisplayField() {
+	}
+
+	public ReduceToDisplayField(String foo) {
+		this.foo = foo;
+	}
+
+	public String getFoo() {
+		return foo;
+	}
+
+	public void setFoo(String foo) {
+		this.foo = foo;
 	}
 }

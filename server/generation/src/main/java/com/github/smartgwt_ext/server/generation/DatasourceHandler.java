@@ -16,13 +16,10 @@
 
 package com.github.smartgwt_ext.server.generation;
 
+import com.github.smartgwt_ext.server.core.DelegateFieldInformation;
 import com.github.smartgwt_ext.server.generation.model.JsDatasourceField;
 import com.github.smartgwt_ext.server.introspection.BeanInformation;
 import com.github.smartgwt_ext.server.introspection.PropertyInformation;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
 
 /**
  * @author Andreas Berger
@@ -34,8 +31,8 @@ public class DatasourceHandler {
 		return beanInformation.getSimpleName();
 	}
 
-	public Map<Class<?>, Collection<String[]>> getDelegateFields() {
-		return Collections.emptyMap();
+	public DelegateFieldInformation getDelegateFieldInformation() {
+		return null;
 	}
 
 	public void handleCustomExtensions(PropertyInformation<?> prop, JsDatasourceField field) {

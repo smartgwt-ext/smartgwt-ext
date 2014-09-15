@@ -37,6 +37,8 @@ public class JsDatasourceResponse<T> extends JsDatasourceBaseResponse {
 	private Integer endRow;
 	private Integer totalRows;
 	private List<JsRelatedUpdate<?>> relatedUpdates;
+	@JsonIgnore
+	private Class<T> refetch;
 
 	public JsDatasourceResponse() {
 	}
@@ -172,5 +174,13 @@ public class JsDatasourceResponse<T> extends JsDatasourceBaseResponse {
 			this.relatedUpdates = new ArrayList<JsRelatedUpdate<?>>();
 		}
 		this.relatedUpdates.add(value);
+	}
+
+	public void setRefetch(Class<T> refetch) {
+		this.refetch = refetch;
+	}
+
+	public Class<T> getRefetch() {
+		return refetch;
 	}
 }

@@ -106,9 +106,14 @@ public class DatasourceGenerator {
 		mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
 		mapper.getFactory().disable(Feature.AUTO_CLOSE_TARGET);
 
-		for (Map.Entry<Class<?>, Collection<String[]>> entry : this.datasourceHandler.getDelegateFields().entrySet()) {
-			for (String[] path : entry.getValue()) {
-				addDelegateField(BeanInformationFactory.createBeanInformation(entry.getKey()), path);
+		if (datasourceHandler.getDelegateFieldInformation() != null) {
+			Map<Class<?>, Collection<String[]>> delegateFields = datasourceHandler
+					.getDelegateFieldInformation()
+					.getDelegateFields();
+			for (Map.Entry<Class<?>, Collection<String[]>> entry : delegateFields.entrySet()) {
+				for (String[] path : entry.getValue()) {
+					addDelegateField(BeanInformationFactory.createBeanInformation(entry.getKey()), path);
+				}
 			}
 		}
 	}

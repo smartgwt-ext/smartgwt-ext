@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.smartgwt_ext.server.core.processing;
 
 import com.fasterxml.jackson.databind.BeanDescription;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.PropertyName;
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 
@@ -27,8 +29,25 @@ import java.io.IOException;
  */
 public class PasswordDeserializer extends BaseSettableProperty {
 
-	protected PasswordDeserializer(SettableBeanProperty src, BeanDescription beanDesc) {
+	private final PasswordHandler passwordHandler;
+
+	public PasswordDeserializer(PasswordDeserializer delegate, JsonDeserializer<?> deser) {
+		super(delegate, deser);
+		this.passwordHandler = delegate.passwordHandler;
+	}
+
+	protected PasswordDeserializer(
+			SettableBeanProperty src,
+			BeanDescription beanDesc,
+			PasswordHandler passwordHandler
+	) {
 		super(src, beanDesc);
+		this.passwordHandler = passwordHandler;
+	}
+
+	@Override
+	public SettableBeanProperty withValueDeserializer(JsonDeserializer<?> deser) {
+		return new PasswordDeserializer(this, deser);
 	}
 
 	@Override
@@ -41,7 +60,11 @@ public class PasswordDeserializer extends BaseSettableProperty {
 		if (PasswordSerializer.PASSWORD_UNCHANGED.equals(value)) {
 			return null;
 		}
-		setter.setValue(instance, value);
+		String encryptedPassword = null;
+		if (value != null) {
+			encryptedPassword = passwordHandler.transform((String) value);
+		}
+		setter.setValue(instance, encryptedPassword);
 		return null;
 	}
 }

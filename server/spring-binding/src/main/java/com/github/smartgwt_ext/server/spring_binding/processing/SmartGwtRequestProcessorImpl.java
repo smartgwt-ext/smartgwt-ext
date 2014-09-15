@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.smartgwt_ext.server.core.HasIdField;
+import com.github.smartgwt_ext.server.core.annotations.FieldFeatures;
 import com.github.smartgwt_ext.server.core.communication.SmartGwtException;
 import com.github.smartgwt_ext.server.core.communication.ValidationException;
 import com.github.smartgwt_ext.server.core.communication.model.JsDatasourceBaseResponse;
@@ -32,9 +33,12 @@ import com.github.smartgwt_ext.server.core.processing.CustomRequestHandler;
 import com.github.smartgwt_ext.server.core.processing.EnhancedObjectMapper;
 import com.github.smartgwt_ext.server.core.processing.EntityByDatasourceResolver;
 import com.github.smartgwt_ext.server.core.processing.ErrorHandler;
+import com.github.smartgwt_ext.server.core.processing.PasswordHandler;
 import com.github.smartgwt_ext.server.core.processing.SmartGwtRequestContext;
 import com.github.smartgwt_ext.server.core.processing.SmartGwtRequestProcessor;
 import com.github.smartgwt_ext.server.core.processing.WrappedException;
+import com.github.smartgwt_ext.server.introspection.BeanInformation;
+import com.github.smartgwt_ext.server.introspection.PropertyInformation;
 import com.smartgwt.client.rpc.RPCResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,11 +81,17 @@ public class SmartGwtRequestProcessorImpl implements SmartGwtRequestProcessor {
 	private TransactionTemplate transactionTemplate;
 
 	public SmartGwtRequestProcessorImpl() {
-		EnhancedObjectMapper em = new EnhancedObjectMapper() {
+		EnhancedObjectMapper em = new EnhancedObjectMapper(null) {
 
 			@Override
 			protected <T extends HasIdField> T getEntityById(Serializable id, Class<T> entityClass) {
 				return dao.getById(entityClass, id);
+			}
+
+			@Override
+			protected PasswordHandler getPasswordHandler(BeanInformation<?> bean, PropertyInformation<?> prop,
+					FieldFeatures.Password password) {
+				return null;
 			}
 		};
 		mapper = em.getMapper();
@@ -92,7 +102,9 @@ public class SmartGwtRequestProcessorImpl implements SmartGwtRequestProcessor {
 		transactionTemplate = new TransactionTemplate(transactionManager);
 	}
 
-	/** @param dao the dao to set */
+	/**
+	 * @param dao the dao to set
+	 */
 	public void setDao(SmartGwtDAO dao) {
 		this.dao = dao;
 	}

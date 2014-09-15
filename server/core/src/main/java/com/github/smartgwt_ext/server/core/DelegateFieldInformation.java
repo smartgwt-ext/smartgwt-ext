@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-package com.github.smartgwt_ext.server.core.processing;
+package com.github.smartgwt_ext.server.core;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Andreas Berger
- * @created 10.01.2013
+ * @created 13.09.14 - 23:25
  */
-public class WrappedException extends RuntimeException {
+public class DelegateFieldInformation {
+	private Map<Class<?>, Collection<String[]>> delegateFields = new HashMap<Class<?>, Collection<String[]>>();
 
-	private static final long serialVersionUID = -444986043799875155L;
+	public void addDelegateField(Class<?> clazz, String... path) {
+		Collection<String[]> list = delegateFields.get(clazz);
+		if (list == null) {
+			list = new ArrayList<String[]>();
+			delegateFields.put(clazz, list);
+		}
+		list.add(path);
+	}
 
-	public WrappedException(Exception e) {
-		super(e);
+	public Map<Class<?>, Collection<String[]>> getDelegateFields() {
+		return delegateFields;
 	}
 }

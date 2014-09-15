@@ -25,22 +25,30 @@ public class JsDatasourceTransactionRequest {
 	private int transactionNum;
 	private List<JsDatasourceRequest> operations;
 
-	/** @return the transactionNum */
+	/**
+	 * @return the transactionNum
+	 */
 	public int getTransactionNum() {
 		return transactionNum;
 	}
 
-	/** @param transactionNum the transactionNum to set */
+	/**
+	 * @param transactionNum the transactionNum to set
+	 */
 	public void setTransactionNum(int transactionNum) {
 		this.transactionNum = transactionNum;
 	}
 
-	/** @return the operations */
+	/**
+	 * @return the operations
+	 */
 	public List<JsDatasourceRequest> getOperations() {
 		return operations;
 	}
 
-	/** @param operations the operations to set */
+	/**
+	 * @param operations the operations to set
+	 */
 	public void setOperations(List<JsDatasourceRequest> operations) {
 		this.operations = operations;
 	}
